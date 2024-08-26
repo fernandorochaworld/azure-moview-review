@@ -26,3 +26,28 @@ Host=postgres;Database=reviewvideo;Username=reviewvideo;Password=Passw0rd2024!
 ### Instalação do Azure CLI
 
 [https://learn.microsoft.com/en-us/cli/azure/install-azure-cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+
+
+# Azure
+
+#### Install Azure CLI
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az --version
+
+#### Login
+
+az login
+
+#### Connection
+az account set --subscription \<hash-id\>
+az aks get-credentials --resource-group aula-k8s_group --name aula-k8s --overwrite-existing
+
+#### Publish new image
+
+docker build -t fernandorochaworld/azure-movie-review:v1.0.0 -f ./Review-Filmes.Web//Dockerfile --push .
+
+#### Apply deployment
+
+kubectl apply -f k8s/deployment.yaml
+
