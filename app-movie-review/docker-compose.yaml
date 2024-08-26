@@ -1,0 +1,17 @@
+services:
+  app:
+    image: fernandorochaworld/azure-movie-review:v1.0.0
+    environment:
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Host=db;Database=movie_review;Username=movie_review;Password=Passw0rd9753!"
+    ports:
+      - 8080:8080
+
+  db:
+    image: postgres:13.1
+    environment:
+      POSTGRES_PASSWORD: Passw0rd9753!
+      POSTGRES_USER: movie_review
+      POSTGRES_DB: movie_review
+    ports:
+      - 5432:5432
