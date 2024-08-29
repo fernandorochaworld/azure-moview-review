@@ -1,0 +1,112 @@
+# Deployment for PostgreSQL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13.1
+        ports:
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_PASSWORD
+            value: Passw0rd9753!
+          - name: POSTGRES_USER
+            value: movie_review
+          - name: POSTGRES_DB
+            value: movie_review
+---
+# Service for PostgreSQL
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+  type: ClusterIP
+# ---
+# # Deployment for Movie Review
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: movie-review
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       app: movie-review
+#   template:
+#     metadata:
+#       labels:
+#         app: movie-review
+#     spec:
+#       containers:
+#         - name: movie-review
+#           image: fernandorochaworld/azure-movie-review:v1.0.0
+#           ports:
+#             - containerPort: 8080
+#           env:
+#             - name: ASPNETCORE_HTTP_PORTS
+#               value: "8080"
+#             - name: ConnectionStrings__DefaultConnection
+#               value: "Host=postgres;Database=movie_review;Username=movie_review;Password=Passw0rd9753!"
+# ---
+# # Service for Movie Review
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: movie-review
+# spec:
+#   selector:
+#     app: movie-review
+#   ports:
+#     - port: 80
+#       targetPort: 8080
+#   type: LoadBalancer
+---
+# Deployment for Converter
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: converter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: converter
+  template:
+    metadata:
+      labels:
+        app: converter
+    spec:
+      containers:
+        - name: converter
+          image: fernandorochaworld/temperature-converter:v0.2.0
+          ports:
+            - containerPort: 8080
+---
+# Service for Converter
+apiVersion: v1
+kind: Service
+metadata:
+  name: converter
+spec:
+  selector:
+    app: converter
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
